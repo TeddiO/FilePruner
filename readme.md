@@ -17,12 +17,12 @@ directories:
 file_types:
   - ".txt"
   - ".log"
-delete_after: "48h"  # Go duration format (e.g. 24h, 30m, 15s)
+delete_after: "48h"  # Go duration format (e.g. 24h, 30m, 15s) 'd' syntax is also supported, e.g. 30d for 30 days.
 ```
 
 - **directories**: List of directories to scan.
 - **file_types**: List of file types (extensions) to target for deletion.
-- **delete_after**: Specifies the file age threshold for deletion using Go's duration format. E.g., `24h` for 24 hours, `30m` for 30 minutes, `15s` for 15 seconds.
+- **delete_after**: Specifies the file age threshold for deletion using Go's duration format. E.g. `24h` for 24 hours, `30m` for 30 minutes, `15s` for 15 seconds.
 
 ### Launching the Application
 
@@ -81,7 +81,7 @@ To simulate deletion without actually deleting files, you can either:
 - Use the dry run command-line flag:
 
   ```bash
-  ./filepruner -config="custom-config.yml" -dry-run
+  ./filepruner -dry-run
   ```
 
 - Or set the dry run environment variable:
