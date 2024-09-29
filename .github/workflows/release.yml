@@ -1,0 +1,45 @@
+name: "Build & Release"
+
+permissions:
+  contents: write
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-file-pruner:
+    runs-on: ubuntu-latest
+    container: golang
+
+    steps:
+      - name: Fetch code
+        uses: actions/checkout@v4
+
+      - name: Set workspace as safe (workaround)
+        run: git config --global --add safe.directory $GITHUB_WORKSPACE
+
+      - name: Set short SHA
+        run: echo "SHORT_SHA=$(echo ${{ github.sha }} | cut -c 1-8)" >> $GITHUB_ENV
+
+      - name: "Build Go Runtime"
+        run: |
+          apt update && apt install zip -y
+          go mod download
+          CGO_ENABLED=0 GOARCH=amd64 GOOS=windows go build -o file-pruner.exe -ldflags="-extldflags=-static"
+          zip file-pruner.zip file-pruner.exe
+
+      - name: "Publish to GitHub"
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            file-pruner.zip
+          token: ${{ secrets.GITHUB_TOKEN }}
+          name: "File Pruner ${{ env.SHORT_SHA }}"
+          tag_name: ${{ env.SHORT_SHA }}
+          body: "Release ${{ github.sha }}"
+          draft: false
+          prerelease: false
+          make_latest: true
+          generate_release_notes: true

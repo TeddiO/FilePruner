@@ -1,0 +1,7 @@
+directories:
+  - "C:/path/to/directory1"
+  - "C:/path/to/directory2"
+file_types:
+  - ".txt"
+  - ".log"
+delete_after: "48h"  # Go duration format (e.g. 24h, 30m, 15s)
