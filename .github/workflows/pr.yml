@@ -1,0 +1,20 @@
+name: "PR"
+on:
+  pull_request:
+
+jobs:
+  preview-build-file-pruner:
+    runs-on: ubuntu-latest
+    container: golang
+
+    steps:
+      - name: Fetch code
+        uses: actions/checkout@v4
+
+      - name: Set workspace as safe (workaround)
+        run: git config --global --add safe.directory $GITHUB_WORKSPACE
+
+      - name: "Build Go Runtime"
+        run: |
+          go mod download
+          CGO_ENABLED=0 GOARCH=amd64 GOOS=windows go build -o file-pruner.exe -ldflags="-extldflags=-static"
