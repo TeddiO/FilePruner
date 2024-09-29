@@ -90,3 +90,4 @@ To simulate deletion without actually deleting files, you can either:
   export FILEPRUNER_DRY_RUN=true
   ./filepruner -config="custom-config.yml"
   ```
+  
