@@ -28,7 +28,13 @@ jobs:
           apt update && apt install zip -y
           go mod download
           CGO_ENABLED=0 GOARCH=amd64 GOOS=windows go build -o file-pruner.exe -ldflags="-extldflags=-static"
-          zip file-pruner.zip file-pruner.exe
+
+      - name: "Generate build info file"
+        run: |
+          echo "Build Date: $(date -u)" > build-info.txt
+          echo "Git SHA: ${{ github.sha }}" >> build-info.txt
+          echo "Repo URL: https://github.com/${{ github.repository }}" >> build-info.txt
+          zip file-pruner.zip file-pruner.exe build-info.txt
 
       - name: "Publish to GitHub"
         uses: softprops/action-gh-release@v2
